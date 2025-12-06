@@ -1,0 +1,14 @@
+let
+    Source = Excel.Workbook(File.Contents("C:\Users\admin\Downloads\BlinkIT Grocery Data.xlsx"), null, true),
+    #"BlinkIT Grocery Data_Sheet" = Source{[Item="BlinkIT Grocery Data",Kind="Sheet"]}[Data],
+    #"Promoted Headers" = Table.PromoteHeaders(#"BlinkIT Grocery Data_Sheet", [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Item Fat Content", type text}, {"Item Identifier", type text}, {"Item Type", type text}, {"Outlet Establishment Year", Int64.Type}, {"Outlet Identifier", type text}, {"Outlet Location Type", type text}, {"Outlet Size", type text}, {"Outlet Type", type text}, {"Item Visibility", type number}, {"Item Weight", type number}, {"Sales", type number}, {"Rating", Int64.Type}}),
+    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","LF","Low Fat",Replacer.ReplaceText,{"Item Fat Content"}),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Replaced Value",{{"Item Fat Content", type text}}),
+    #"Uppercased Text" = Table.TransformColumns(#"Changed Type1",{{"Item Fat Content", Text.Upper, type text}}),
+    #"Capitalized Each Word" = Table.TransformColumns(#"Uppercased Text",{{"Item Fat Content", Text.Proper, type text}}),
+    #"Replaced Value1" = Table.ReplaceValue(#"Capitalized Each Word","Reg","Regular",Replacer.ReplaceText,{"Item Fat Content"}),
+    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","Regularular","Regular",Replacer.ReplaceText,{"Item Fat Content"}),
+    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2",null,0,Replacer.ReplaceValue,{"Item Weight"})
+in
+    #"Replaced Value3"
