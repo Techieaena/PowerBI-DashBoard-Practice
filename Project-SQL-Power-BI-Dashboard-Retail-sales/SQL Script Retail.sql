@@ -1,0 +1,261 @@
+-- Describe `retail`.`retail_sales_dataset(customers)`
+-- select * from `retail`.`retail_sales_dataset(customers)`
+-- RENAME TABLE `retail`.`sales` TO `retail`.`customers`;
+-- RENAME TABLE `retail`.`retail_sales_dataset(products)` TO `retail`.`products`;
+-- RENAME TABLE `retail`.`retail_sales_dataset(stores)` TO `retail`.`stores`;
+-- RENAME TABLE `retail`.`retail_sales_dataset(transactions)` TO `retail`.`transactions`;
+-- SELECT SUM(UnitPrice) AS TotalSales
+-- FROM products;
+-- SELECT COUNT(*) FROM customers;
+-- SELECT COUNT(*) FROM products;
+-- SELECT COUNT(*) FROM stores;
+-- SELECT COUNT(*) FROM transactions;
+-- SELECT 
+-- SUM(CASE WHEN FirstName IS NULL OR FirstName = '' THEN 1 ELSE 0 END) AS missing_firstname,
+-- SUM(CASE WHEN LastName IS NULL OR LastName = '' THEN 1 ELSE 0 END) AS missing_lastname,
+-- SUM(CASE WHEN BirthDate IS NULL OR BirthDate = '' THEN 1 ELSE 0 END) AS missing_birthdate,
+-- SUM(CASE WHEN GENDER IS NULL OR GENDER = '' THEN 1 ELSE 0 END) as missing_gender,
+-- SUM(CASE WHEN JoinDate IS NULL OR JoinDate = '' THEN 1 ELSE 0 END) as missing_Joindate
+-- FROM customers;
+-- SELECT FirstName, LastName, BirthDate, COUNT(*) as cnt
+-- FROM customers
+-- GROUP BY FirstName, LastName, BirthDate
+-- HAVING cnt > 1;
+-- SELECT
+-- SUM(CASE WHEN TransactionID IS NULL OR TransactionID = '' THEN 1 ELSE 0 END) AS missing_transactionsID,
+-- SUM(CASE WHEN Date IS NULL OR Date = '' THEN 1 ELSE 0 END) AS missing_date,
+-- SUM(CASE WHEN CustomerID IS NULL OR CustomerID = '' THEN 1 ELSE 0 END) AS missing_Customerid,
+-- SUM(CASE WHEN ProductID IS NULL OR ProductID = '' THEN 1 ELSE 0 END) as missing_ProductID,
+-- SUM(CASE WHEN StoreID IS NULL OR StoreID = '' THEN 1 ELSE 0 END) as missing_StoreID,
+-- SUM(CASE WHEN QUANTITY IS NULL OR QUANTITY = '' THEN 1 ELSE 0 END) AS missing_quantity,
+-- SUM(CASE WHEN DISCOUNT IS NULL OR DISCOUNT = '' THEN 1 ELSE 0 END) AS missing_discount
+-- SUM(CASE WHEN PaymentMethod IS NULL OR PaymentMethod = '' THEN 1 ELSE 0 END) AS missing_paymentmethod
+-- FROM transactions;
+-- SELECT StoreID, ProductID, COUNT(*) AS missing_count
+-- FROM transactions
+-- WHERE Discount IS NULL OR Discount = ''
+-- GROUP BY StoreID, ProductID
+-- ORDER BY missing_count DESC;
+-- SELECT StoreID, ProductID, COUNT(*) AS missing_count
+-- FROM transactions
+-- WHERE Discount IS NULL OR Discount = ''
+-- GROUP BY StoreID, ProductID
+-- ORDER BY missing_count DESC
+-- LIMIT 20;
+-- SELECT * FROM transactions
+-- WHERE Discount IS NULL;
+-- SELECT Discount, COUNT(*) AS cnt
+-- FROM transactions
+-- GROUP BY Discount;
+-- SELECT
+-- SUM(CASE WHEN ï»¿ProductID IS NULL OR ï»¿ProductID = '' THEN 1 OR 0 END) AS missing_productID,
+-- SUM(CASE WHEN ProductName IS NULL OR ProductName = '' THEN 1 OR 0 END) AS missing_productname,
+-- SUM(CASE WHEN Category IS NULL OR Category = '' THEN 1 OR 0 END) AS missing_Category,
+-- SUM(CASE WHEN SubCategory IS NULL OR SubCategory = '' THEN 1 OR 0 END) AS missing_SubCategory,
+-- SUM(CASE WHEN UnitPrice IS NULL OR UnitPrice = '' THEN 1 OR 0 END) AS missing_UnitPrice,
+-- SUM(CASE WHEN CostPrice IS NULL OR CostPrice = '' THEN 1 OR 0 END) AS missing_CostPrice
+-- FROM products;
+-- ALTER TABLE products CHANGE `ï»¿ProductID` ProductID TEXT;
+-- SELECT
+--     SUM(CASE WHEN ProductID IS NULL OR ProductID = '' THEN 1 ELSE 0 END) AS missing_productID,
+--     SUM(CASE WHEN ProductName IS NULL OR ProductName = '' THEN 1 ELSE 0 END) AS missing_productname,
+--     SUM(CASE WHEN Category IS NULL OR Category = '' THEN 1 ELSE 0 END) AS missing_Category,
+--     SUM(CASE WHEN SubCategory IS NULL OR SubCategory = '' THEN 1 ELSE 0 END) AS missing_SubCategory,
+--     SUM(CASE WHEN UnitPrice IS NULL OR UnitPrice = '' THEN 1 ELSE 0 END) AS missing_UnitPrice,
+--     SUM(CASE WHEN CostPrice IS NULL OR CostPrice = '' THEN 1 ELSE 0 END) AS missing_CostPrice
+-- FROM products;
+-- SELECT
+--     SUM(CASE WHEN StoreID IS NULL OR StoreID = '' THEN 1 ELSE 0 END) AS missing_StoreID,
+--     SUM(CASE WHEN StoreName IS NULL OR StoreName = '' THEN 1 ELSE 0 END) AS missing_StoreName,
+--     SUM(CASE WHEN City IS NULL OR City = '' THEN 1 ELSE 0 END) AS missing_City,
+--     SUM(CASE WHEN Region IS NULL OR Region = '' THEN 1 ELSE 0 END) AS missing_Region
+-- FROM stores;
+-- SELECT FirstName, LastName, BirthDate, COUNT(*) AS cnt
+-- FROM customers
+-- GROUP BY FirstName, LastName, BirthDate
+-- HAVING cnt > 1;
+-- SELECT *
+-- FROM customers
+-- WHERE STR_TO_DATE(BirthDate, '%Y-%m-%d') IS NULL;
+-- SELECT * FROM products
+-- WHERE UnitPrice < 0 OR CostPrice < 0;
+-- SELECT *
+-- FROM transactions
+-- WHERE Quantity <= 0 OR Discount < 0;
+-- SELECT t.CustomerID FROM transactions t
+-- LEFT JOIN customers c ON t.CustomerID = c.CustomerID
+-- WHERE c.CustomerID IS NULL;
+-- SELECT t.ProductID
+-- FROM transactions t
+-- LEFT JOIN products p ON t.ProductID = p.ProductID
+-- WHERE p.ProductID IS NULL;
+-- SELECT t.StoreID FROM transactions t
+-- LEFT JOIN stores s ON t.StoreID = s.StoreID
+-- WHERE s.StoreID IS NULL;
+-- SELECT * FROM products WHERE UnitPrice < 1 OR UnitPrice > 1000;
+-- SELECT * FROM transactions where quantity < 0 or Quantity > 4;
+-- SELECT * FROM customers WHERE BirthDate < CURDATE();
+-- ALTER TABLE customers ADD Age INT;
+-- UPDATE customers SET Age = TIMESTAMPDIFF(YEAR, BirthDate, CURDATE());
+-- ALTER TABLE transactions ADD TotalAmount DOUBLE;
+-- UPDATE transactions
+-- SET TotalAmount = Quantity * (SELECT UnitPrice FROM products WHERE products.ProductID = transactions.ProductID) * (1 - Discount);
+-- select * from transactions;
+-- SET SQL_SAFE_UPDATES = 0;
+-- UPDATE customers
+-- SET FirstName = TRIM(FirstName),
+--     LastName = TRIM(LastName);
+-- select * from customers;
+-- UPDATE products
+-- SET ProductName = TRIM(ProductName),
+--     Category = TRIM(Category),
+--     SubCategory = TRIM(SubCategory);
+-- select * from products;
+-- SET SQL_SAFE_UPDATES = 1;
+-- ALTER TABLE customers ADD Age_number INT;
+-- UPDATE customers
+-- SET Age_number = TIMESTAMPDIFF(YEAR, BirthDate, CURDATE())
+-- WHERE BirthDate IS NOT NULL;
+-- SELECT BirthDate FROM customers
+-- WHERE STR_TO_DATE(BirthDate, '%Y-%m-%d') IS NULL AND BirthDate IS NOT NULL AND BirthDate <> '';
+-- UPDATE customers
+-- SET Age_number = TIMESTAMPDIFF(
+--     YEAR,
+--     STR_TO_DATE(BirthDate, '%Y-%m-%d'),
+--     CURDATE()
+-- )
+-- WHERE STR_TO_DATE(BirthDate, '%Y-%m-%d') IS NOT NULL;
+-- SELECT t.TransactionID, t.Quantity, p.UnitPrice, t.Quantity * p.UnitPrice AS GrossRevenue
+-- FROM transactions t
+-- JOIN products p ON t.ProductID = p.ProductID;
+-- -- ALTER TABLE transactions
+-- -- ADD GrossRevenue DOUBLE;
+-- SELECT * FROM TRANSACTIONS;
+-- SELECT COUNT(*) AS unmatched_rows
+-- FROM transactions t
+-- LEFT JOIN products p
+--   ON t.ProductID = p.ProductID
+-- WHERE p.ProductID IS NULL;
+-- SELECT COUNT(*) AS null_unitprice
+-- FROM products
+-- WHERE UnitPrice IS NULL;
+-- SELECT
+--     t.ProductID,
+--     p.ProductID
+-- FROM transactions t
+-- JOIN products p
+--   ON TRIM(t.ProductID) = TRIM(p.ProductID)
+-- LIMIT 10;
+-- SELECT
+--     t.TransactionID,
+--     t.ProductID,
+--     t.Quantity,
+--     p.UnitPrice,
+--     t.GrossRevenue
+-- FROM transactions t
+-- JOIN products p
+--   ON TRIM(t.ProductID) = TRIM(p.ProductID)
+-- LIMIT 10;
+-- SELECT COUNT(*) FROM transactions WHERE Quantity IS NULL;
+-- SELECT COUNT(*) FROM products WHERE UnitPrice IS NULL;
+-- SELECT COUNT(*) AS unmatched_rows
+-- FROM transactions t
+-- LEFT JOIN products p
+--   ON t.ProductID = p.ProductID
+-- WHERE p.ProductID IS NULL;
+-- SELECT
+--     t.TransactionID,
+--     t.Quantity,
+--     p.UnitPrice,
+--     t.Quantity * p.UnitPrice AS GrossRevenue
+-- FROM transactions t
+-- JOIN products p;
+-- --   ON TRIM(t.ProductID) = TRIM(p.ProductID);
+-- UPDATE transactions t
+-- JOIN products p
+--   ON TRIM(t.ProductID) = TRIM(p.ProductID)
+-- SET t.GrossRevenue = t.Quantity * p.UnitPrice;
+-- select * from transactions;
+-- SELECT
+--     COUNT(*) AS total_rows,
+--     COUNT(GrossRevenue) AS non_null_gross_revenue
+-- FROM transactions;
+-- ALTER TABLE transactions ADD NetRevenue DOUBLE;
+-- UPDATE transactions t
+-- JOIN products p
+--   ON TRIM(t.ProductID) = TRIM(p.ProductID)
+-- SET t.NetRevenue =
+--     t.Quantity * p.UnitPrice * (1 - t.Discount);
+-- ALTER TABLE transactions ADD Profit DOUBLE;
+-- UPDATE transactions t
+-- JOIN products p
+--   ON TRIM(t.ProductID) = TRIM(p.ProductID)
+-- SET t.Profit =
+--     (t.Quantity * p.UnitPrice * (1 - t.Discount))
+--     - (t.Quantity * p.CostPrice);
+-- select * from transactions;
+-- Profit should not exceed NetRevenue
+-- SELECT COUNT(*) 
+-- FROM transactions
+-- WHERE Profit > NetRevenue;
+-- CREATE VIEW store_sales_summary AS
+-- SELECT
+--     s.StoreID,
+--     s.StoreName,
+--     s.City,
+--     s.Region,
+--     COUNT(t.TransactionID) AS TotalTransactions,
+--     SUM(t.Quantity) AS TotalUnitsSold,
+--     SUM(t.GrossRevenue) AS GrossRevenue,
+--     SUM(t.NetRevenue) AS NetRevenue,
+--     SUM(t.Profit) AS Profit
+-- FROM transactions t
+-- JOIN stores s
+--   ON t.StoreID = s.StoreID
+-- GROUP BY s.StoreID, s.StoreName, s.City, s.Region;
+-- select * from stores;
+-- select * from products;
+-- select * from transactions;
+-- CREATE VIEW customer_value_summary AS
+-- SELECT
+--     c.CustomerID,
+--     CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
+--     c.Gender,
+--     c.City,
+--     COUNT(t.TransactionID) AS TotalOrders,
+--     SUM(t.Quantity) AS TotalUnitsPurchased,
+--     SUM(t.NetRevenue) AS LifetimeRevenue,
+--     SUM(t.Profit) AS LifetimeProfit,
+--     AVG(t.NetRevenue) AS AvgOrderValue
+-- FROM transactions t
+-- JOIN customers c
+--   ON t.CustomerID = c.CustomerID
+-- GROUP BY c.CustomerID, CustomerName, c.Gender, c.City;
+-- SHOW VARIABLES WHERE Variable_name = 'hostname';
+-- select * from transactions;
+-- select * from products;
+-- select * from stores;
+-- select * from customers;
+-- SELECT BirthDate
+-- FROM customers
+-- WHERE BirthDate IS NOT NULL
+-- LIMIT 10;
+-- ALTER TABLE customers
+-- UPDATE customers
+-- SET BirthDate = STR_TO_DATE(BirthDate, '%m/%d/%Y')
+-- WHERE BirthDate LIKE '%/%/%';
+-- ALTER TABLE customers
+-- DROP COLUMN BirthDate_clean;
+-- UPDATE customers
+-- SET Age = TIMESTAMPDIFF(
+--     YEAR,
+--     STR_TO_DATE(BirthDate, '%Y-%m-%d'),
+--     CURDATE()
+-- );
+-- ALTER TABLE customers
+-- DROP COLUMN Age_number;
+
+
+
+
+
